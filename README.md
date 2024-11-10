@@ -1,7 +1,7 @@
 
-# Talk-A-Tive
+# Study Adda
 
-Talk-a-tive is a Full Stack Chatting App.
+Study Adda is a Full Stack Chatting App.
 Uses Socket.io for real time communication and stores user details in encrypted format in Mongo DB Database.
 ## Tech Stack
 
@@ -13,7 +13,7 @@ Uses Socket.io for real time communication and stores user details in encrypted 
   
 ## Demo
 
-[https://talk-a-tive.herokuapp.com/](https://talk-a-tive-7fgq.onrender.com)
+[https://talk-a-tive.herokuapp.com/](https://Study Adda-7fgq.onrender.com)
 
 ![](https://github.com/piyush-eon/mern-chat-app/blob/master/screenshots/group%20%2B%20notif.PNG)
 ## Run Locally
@@ -21,7 +21,7 @@ Uses Socket.io for real time communication and stores user details in encrypted 
 Clone the project
 
 ```bash
-  git clone https://github.com/piyush-eon/mern-chat-app
+  git clone https://github.com/rakib3004/mern-chat-app
 ```
 
 Go to the project directory
