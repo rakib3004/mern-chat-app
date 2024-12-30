@@ -9,25 +9,27 @@ import {
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
 
-const formatMessageContent = (content) => {
-  const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
-  return content.split(urlRegex).map((part, index) => {
-    if (part.match(urlRegex)) {
-      return (
-        <a
-          key={index}
-          href={part}
-          target="_blank"
-          style={{
-            color: "blue", // Set link color
-            textDecoration: "underline", // Underline the link
-          }}
-        >          {part}
-        </a>
-      );
-    }
-    return part;
-  });
+const formatMessageContent = (part) => {
+  const urlRegex = /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})([^\s]*)/g;
+  if (part.match(urlRegex)) {
+    const url =
+      part.startsWith("http://") || part.startsWith("https://")
+        ? part
+        : `https://${part}`;
+    return (
+      <a
+        href={url}
+        target="_blank"
+        style={{
+          color: "blue", // Set link color
+          textDecoration: "underline", // Underline the link
+        }}
+      >
+        {part}
+      </a>
+    );
+  }
+  return part;
 };
 
 const ScrollableChat = ({ messages }) => {
