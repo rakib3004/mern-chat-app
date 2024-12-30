@@ -9,6 +9,27 @@ import {
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
 
+const formatMessageContent = (content) => {
+  const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+  return content.split(urlRegex).map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          style={{
+            color: "blue", // Set link color
+            textDecoration: "underline", // Underline the link
+          }}
+        >          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
 
@@ -42,7 +63,7 @@ const ScrollableChat = ({ messages }) => {
                 maxWidth: "75%",
               }}
             >
-              {m.content}
+              {formatMessageContent(m.content)}
             </span>
           </div>
         ))}

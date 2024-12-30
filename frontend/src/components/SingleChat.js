@@ -11,7 +11,19 @@ import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  InputGroup,
+  InputRightElement,
+} from '@chakra-ui/react';
+import { FiUpload } from 'react-icons/fi';
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
@@ -22,6 +34,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
@@ -70,6 +84,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setUploadedFile(e.target.files[0]);
+    }
+    setNewMessage(`Send a file`);
+    sendMessage();
+  };
+
   const sendMessage = async () => {
     if (!newMessage) {
       return;
@@ -83,6 +105,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
+        setUploadedFile(null);
         const { data } = await axios.post(
           "/api/message",
           {
@@ -233,7 +256,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <div>
                   <Lottie
                     options={defaultOptions}
-                    // height={50}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
                   />
@@ -241,18 +263,45 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
-              <Button
-              onClick={sendMessage}
-              >
-              Send
-              </Button>
+               
+              <Box display="grid" gridTemplateColumns="1fr auto" gap="8px" mb="4px">
+                  <InputGroup>
+                    <Input
+                      variant="outline"
+                      bg="#E0E0E0"
+                      placeholder="Enter a message..."
+                      value={newMessage}
+                      onChange={typingHandler}
+                    />
+                    <InputRightElement>
+                      <IconButton
+                        aria-label="Upload File"
+                        icon={<FiUpload />}
+                        size="sm"
+                        onClick={onOpen}
+                        variant="ghost"
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                  <Button onClick={sendMessage}>Send</Button>
+                </Box>
+
+                <Modal isOpen={isOpen} onClose={onClose}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Upload a File</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <input type="file" onChange={handleFileChange} />
+                      {uploadedFile && <p>Selected File: {uploadedFile.name}</p>}
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme="teal" onClick={onClose}>
+                        Done
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
             </FormControl>
           </Box>
         </>
