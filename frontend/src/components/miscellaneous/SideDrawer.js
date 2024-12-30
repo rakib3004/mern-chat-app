@@ -1,5 +1,7 @@
+import { Avatar } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
+import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import {
@@ -16,21 +18,21 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { Avatar } from "@chakra-ui/avatar";
-import { useHistory } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { useToast } from "@chakra-ui/toast";
-import ChatLoading from "../ChatLoading";
+import {
+  Image
+} from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/spinner";
-import ProfileModal from "./ProfileModal";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
+import { useToast } from "@chakra-ui/toast";
+import { Tooltip } from "@chakra-ui/tooltip";
+import axios from "axios";
+import { useState } from "react";
+import NotificationBadge, { Effect } from "react-notification-badge";
+import { useHistory } from "react-router-dom";
 import { getSender } from "../../config/ChatLogics";
-import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
+import ChatLoading from "../ChatLoading";
+import UserListItem from "../userAvatar/UserListItem";
+import ProfileModal from "./ProfileModal";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -141,7 +143,14 @@ function SideDrawer() {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans">
+        <Text fontSize="3xl" fontFamily="Work sans" d="flex">
+        <Image
+          borderRadius="full"
+          boxSize="43px"
+          src="chat.png"
+          alt="Talkwave"
+          m="0 12px 0 0"
+         />
           Talkwave
         </Text>
         <div>
