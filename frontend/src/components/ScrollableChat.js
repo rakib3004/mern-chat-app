@@ -9,6 +9,48 @@ import {
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
 
+const isForbiddenUrl = (url) => {
+  
+  const forbiddenPatterns = [
+/:[0-9]+$/,  
+  /phishing/i,  
+  /\/wp-admin\//i,  
+  /\/login\//i,  
+  /\/signin\//i,  
+  /\/admin\//i,  
+  /:\/\/[^\/]+\.dollar/i,  
+  /:\/\/[^\/]+\.cn/i,  
+  /:\/\/[^\/]+\.xyz/i,  
+  /:\/\/[^\/]+\.tk/i,  
+  /:\/\/[^\/]+\.top/i,  
+  /:\/\/[^\/]+\.info/i,  
+  /:\/\/[^\/]+\.pro/i,  
+  /:\/\/[^\/]+\.name/i,  
+  /:\/\/[^\/]+\.biz/i,  
+  /:\/\/[^\/]+\.online/i,  
+  /:\/\/[^\/]+\.icu/i,  
+  /:\/\/[^\/]+\.app/i,  
+  /:\/\/[^\/]+\.es/i,  
+  /:\/\/[^\/]+\.site/i,  
+  /:\/\/[^\/]+\.tv/i,  
+  /:\/\/[^\/]+\.fm/i,  
+  /:\/\/[^\/]+\.money/i,  
+  /:\/\/[^\/]+\.link/i,  
+  /:\/\/[^\/]+\.news/i,  
+  /:\/\/[^\/]+\.click/i,  
+  /:\/\/[^\/]+\.tech/i,  
+  /:\/\/[^\/]+\.lottary/i,
+  /\b(xxx|xx|porn|sex|nude|drugs|gun|murder|adult)\b/i, 
+  /:\/\/(?:www\.)?(?:[a-zA-Z0-9-]+\.)*(xxx|xx|porn|sex|nude|drugs|gun|murder|adult)\b/i,   
+  /:\/\/[^\/]+\.website/i,  
+  /:\/\/[^\/]+\.mobi/i,  
+  /:\/\/[^\/]+\.tv/i,  
+  /:\/\/[^\/]+\.com\.ph/i,  
+  ];
+
+  return forbiddenPatterns.some((pattern) => pattern.test(url));
+};
+
 const formatMessageContent = (part) => {
   const urlRegex = /([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})([^\s]*)/g;
   if (part.match(urlRegex)) {
@@ -16,6 +58,15 @@ const formatMessageContent = (part) => {
       part.startsWith("http://") || part.startsWith("https://")
         ? part
         : `https://${part}`;
+
+    if (isForbiddenUrl(url)) {
+      return (
+        <span style={{ color: "red", fontWeight: "bold" }}>
+          Forbidden link detected
+        </span>
+      );
+    }
+
     return (
       <a
         href={url}
