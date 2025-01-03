@@ -88,7 +88,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     if (e.target.files.length > 0) {
       setUploadedFile(e.target.files[0]);
     }
-    setNewMessage(`Send a file`);
+    const data = new FormData();
+    data.append("file", uploadedFile);
+    data.append("upload_preset", "chat-app");
+    data.append("cloud_name", "rakib3004");
+    fetch("https://api.cloudinary.com/v1_1/rakib3004/auto/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNewMessage(data.url.toString());
+      })
+      .catch((err) => {
+        console.log('File not uploaded', err);
+      });
     sendMessage();
   };
 
